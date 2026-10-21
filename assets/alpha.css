@@ -1,0 +1,115 @@
+/* Alpha signature on every client site: chat, splash, Powered by Alpha, choices, the table bar, the demo sheet.
+   Glass rule we learned on KAI/Lamiz: never put a backdrop-filter inside another one, and never give a glass
+   element's ancestors filter/opacity/will-change, or the inner glass blurs nothing. Every glass piece here is
+   a direct child of body or of a plain container. */
+:root{--spring:cubic-bezier(.34,1.4,.44,1);--ease:cubic-bezier(.16,.9,.24,1);--blur:blur(26px) saturate(200%)}
+
+/* ---------- Powered by Alpha Agency ---------- */
+.powered{display:flex;align-items:center;gap:14px;margin-top:26px;padding-top:20px;border-top:1px solid var(--line);text-decoration:none;color:var(--ink);transition:opacity .2s}
+.powered:hover{opacity:.8}
+.alpha-mark{height:44px;width:auto;flex:none}
+.powered-txt{display:grid;gap:1px;text-align:left;font-family:"AW Grotesk Full","IRANYekanX FaNum",system-ui,sans-serif}
+.powered-txt .pb{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.powered-txt .pa{font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+
+/* ---------- chat ---------- */
+.chat{display:flex;flex-direction:column;gap:12px}
+.chat-head{display:flex;align-items:center;gap:12px}
+.chat-head>div{display:grid;line-height:1.45}
+.chat-head b{font-size:16px;font-weight:800}
+.chat-head small{font-size:12.5px;color:var(--muted)}
+.chat-head small.on{color:#1E8C4D}
+.dark .chat-head small.on{color:#5BD08A}
+.chat-av{width:46px;height:46px;border-radius:15px;object-fit:cover;flex:none}
+.chat-note{margin:0;font-size:calc(13px*var(--fs,1));line-height:1.75;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:calc(16px*var(--rk,1));padding:10px 12px}
+.chat-intro{display:grid;gap:10px}
+.field{display:grid;gap:4px;font-size:calc(13px*var(--fs,1));color:var(--muted)}
+.field input{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:calc(14px*var(--rk,1));padding:11px 13px;width:100%}
+.field input:focus,.chat-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.chat-err{margin:0;color:#D13B40;font-size:13px}
+.chat-log{display:flex;flex-direction:column;gap:6px}
+.chat-log:empty{display:none}
+.msg{max-width:84%;padding:8px 13px 6px;border-radius:calc(19px*var(--rk,1));font-size:calc(15px*var(--fs,1));line-height:1.65;white-space:pre-line;overflow-wrap:anywhere;animation:msgIn .32s var(--spring)}
+@keyframes msgIn{from{transform:translateY(6px) scale(.97)}to{transform:none}}
+.msg.me{align-self:flex-start;background:var(--accent);color:var(--onaccent);border-end-start-radius:6px}
+.msg.them{align-self:flex-end;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-end-end-radius:6px}
+.msg.order{background:var(--surface);color:var(--ink);border:1.5px solid var(--accent)}
+.msg.order::before{content:"سفارش";display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:2px}
+.msg time{display:block;font-size:10.5px;opacity:.6;margin-top:1px;text-align:end}
+.msg.pending{opacity:.6}
+.chat-day{align-self:center;font-size:11.5px;color:var(--muted);padding:2px 10px}
+.chat-form{display:flex;gap:8px;align-items:center}
+.chat-form input{flex:1;min-width:0;font:inherit;font-size:calc(16px*var(--fs,1));color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:11px 16px}
+.chat-send{width:46px;height:46px;flex:none;border-radius:50%;border:0;background:var(--accent);color:var(--onaccent);display:grid;place-items:center;cursor:pointer;transition:transform .25s var(--spring)}
+.chat-send:active{transform:scale(.9)}
+.chat-send svg{transform:scaleX(-1)}
+
+.badge{position:absolute;top:2px;right:calc(50% - 22px);min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#E5484D;color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center;font-style:normal}
+
+/* ---------- splash (glass layouts) ---------- */
+#splash{display:none}
+.splashing #splash{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:var(--bg);transition:opacity .5s ease,visibility .5s ease}
+#splash.gone{opacity:0;visibility:hidden}
+.splash-logo{width:min(34vw,132px);height:min(34vw,132px);border-radius:32%;object-fit:cover;opacity:0;transform:scale(.92);animation:splashIn .9s var(--ease) forwards}
+.splash-logo.mono{font-size:54px}
+.splash-bar{position:absolute;bottom:18%;left:50%;transform:translateX(-50%);width:92px;height:2px;border-radius:2px;background:var(--line);overflow:hidden}
+.splash-bar i{display:block;height:100%;width:40%;border-radius:inherit;background:var(--accent);animation:splashBar 1.15s ease-in-out infinite}
+@keyframes splashIn{to{opacity:1;transform:scale(1)}}
+@keyframes splashBar{0%{transform:translateX(-120%)}100%{transform:translateX(320%)}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .splash-logo{opacity:1;transform:none}
+}
+@media (prefers-reduced-transparency:reduce){
+  .hdr-in,.dock,.g-chips a,.table-bar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--surface)!important}
+}
+
+/* ---------- ordering: choices, stock, how the order is received, the table bar (both layout families) ---------- */
+.opts{margin:2px 0 0;font-size:calc(12px*var(--fs,1));line-height:1.6;color:var(--muted)}
+.low{margin:2px 0 0;font-size:calc(12px*var(--fs,1));font-weight:700;color:#C2410C}
+.dark .low{color:#FDBA74}
+.table-bar{position:fixed;z-index:58;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));width:min(calc(100% - 22px),448px);
+  display:flex;align-items:center;gap:6px;padding:6px;border-radius:24px;background:var(--glass-strong);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow);
+  -webkit-backdrop-filter:blur(26px) saturate(200%);backdrop-filter:blur(26px) saturate(200%)}
+.table-bar[hidden]{display:none}
+.tb-no{flex:none;padding:0 10px 0 6px;font-size:13px;color:var(--muted);white-space:nowrap}
+.tb-no b{color:var(--ink);font-size:15px}
+.table-bar button{flex:1;min-width:0;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;padding:0 10px;border:0;border-radius:18px;background:var(--pill-on);color:var(--ink);font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;transition:transform .2s}
+.table-bar button:first-of-type{background:var(--accent);color:var(--onaccent)}
+.table-bar button:active{transform:scale(.96)}
+.table-bar button:disabled{opacity:.5;cursor:default}
+.table-bar svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tb-msg{position:absolute;left:12px;right:12px;bottom:calc(100% + 8px);text-align:center;font-size:13px;font-weight:600;color:var(--ink);pointer-events:none}
+.tb-msg:empty{display:none}
+.tb-msg:not(:empty){padding:9px 12px;border-radius:16px;background:var(--glass-strong);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow)}
+body.has-table{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
+@media(min-width:900px){.table-bar{bottom:calc(16px + env(safe-area-inset-bottom,0px))}body.has-table{padding-bottom:90px}}
+@media(max-width:360px){.tb-no{display:none}.table-bar button{font-size:12.5px}}
+
+.opt-row{display:flex;flex-wrap:wrap;gap:6px}
+.opt-row label{position:relative;cursor:pointer}
+.opt-row input{position:absolute;opacity:0;pointer-events:none}
+.opt-row span{display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:calc(14.5px*var(--fs,1));font-weight:600}
+.opt-row input:checked+span{background:var(--accent);border-color:var(--accent);color:var(--onaccent)}
+.opt-row input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+/* ---------- the owner's look (/panel/look): background pattern and hidden sections, as body classes from site_theme ----------
+   Corners (--rk), text size (--fs), title weight (--hw), photo shape (--ar) and the hero shade (--dim) are variables
+   used inside site.css and glass.css. The glass tab bar, the buy buttons and the Alpha sign never change. */
+body.pat-dots{background-image:radial-gradient(var(--pat) 1.2px,transparent 1.7px);background-size:18px 18px}
+body.pat-grid{background-image:linear-gradient(var(--pat) 1px,transparent 1px),linear-gradient(90deg,var(--pat) 1px,transparent 1px);background-size:28px 28px}
+body.pat-glow{background-image:radial-gradient(140% 60% at 50% -8%,var(--glow),transparent 64%);background-repeat:no-repeat}
+.no-facts .g-facts,.no-picks .g-picks,.no-about .g-about-sec,.no-desc .card .desc,
+.no-photos .card .card-img,.no-search .g-search{display:none!important}
+
+/* ---------- the demo sheet: on sample sites a buy button shows the message it would send ---------- */
+.demo-sheet{border:0;padding:0;width:min(100% - 24px,440px);border-radius:calc(26px*var(--rk,1));background:var(--surface);color:var(--ink)}
+.demo-sheet::backdrop{background:rgba(0,0,0,.5)}
+.demo-in{padding:20px;display:grid;gap:12px}
+.demo-in h2{font-size:18px;font-weight:800;line-height:1.5}
+.demo-in p{margin:0;color:var(--muted);font-size:14px;line-height:1.8}
+.demo-bubble{white-space:pre-line;unicode-bidi:plaintext;overflow-wrap:anywhere;padding:12px 14px;border-radius:18px 18px 6px 18px;background:#DCF8C6;color:#111;font-size:14px;line-height:1.75;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.demo-bubble.tg{background:#EFFDDE}
+.demo-acts{display:grid;gap:8px}
+.demo-acts a,.demo-acts button{display:inline-flex;align-items:center;justify-content:center;height:50px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-weight:700;text-decoration:none;cursor:pointer}
+.demo-acts a{background:var(--accent);border-color:var(--accent);color:var(--onaccent)}
